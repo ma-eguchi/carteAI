@@ -1,0 +1,25 @@
+{
+  "session_id": "156B0EF1-F6F9-420D-BDD9-5E5B94B19D16",
+  "started_at": "2026-04-25T23:08:42Z",
+  "cwd": "/Users/masahiro/Downloads/work/product2",
+  "project_name": "product2",
+  "prompt_seq": 3,
+  "git": {
+    "branch": "(no git)",
+    "uncommitted_changes": 0,
+    "last_commit": "none"
+  },
+  "plans": {
+    "exists": false,
+    "last_modified": 0,
+    "wip_tasks": 0,
+    "todo_tasks": 0,
+    "pending_tasks": 0,
+    "completed_tasks": 0
+  },
+  "changes_this_session": [],
+  "intent": "literal",
+  "ended_at": "2026-04-25T23:09:24Z",
+  "duration_minutes": 540,
+  "memory_logged": true
+}
