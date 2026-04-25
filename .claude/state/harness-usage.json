@@ -1,14 +1,19 @@
 {
   "version": "1.0",
-  "updatedAt": "2026-04-25T23:08:42.916Z",
+  "updatedAt": "2026-04-25T23:56:08.768Z",
   "skills": {},
   "commands": {},
   "agents": {},
   "hooks": {
     "session-init": {
-      "triggered": 1,
+      "triggered": 2,
       "blocked": 0,
-      "lastTriggered": "2026-04-25T23:08:42.916Z"
+      "lastTriggered": "2026-04-25T23:56:08.767Z"
+    },
+    "pretooluse-guard": {
+      "triggered": 1,
+      "blocked": 1,
+      "lastTriggered": "2026-04-25T23:28:46.351Z"
     }
   }
 }
