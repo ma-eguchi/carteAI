@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Noto_Sans_JP } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const notoSansJP = Noto_Sans_JP({
+  variable: "--font-noto-jp",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
 
 export const metadata: Metadata = {
   title: "カルテAI | 整体院・鍼灸院向け施術メモ",
@@ -11,14 +16,25 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja" className={`${geistSans.variable} h-full`}>
-      <body className="min-h-full bg-gray-50 text-gray-900 antialiased">
-        <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center gap-3">
-          <span className="text-2xl">🩺</span>
-          <span className="font-bold text-lg tracking-tight">カルテAI</span>
-          <span className="text-sm text-gray-500 ml-2">整体院・鍼灸院向け施術メモ</span>
+    <html lang="ja" className={`${notoSansJP.variable} h-full`}>
+      <body className="min-h-full antialiased">
+        <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-stone-200">
+          <div className="max-w-4xl mx-auto px-6 py-4 flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <span
+                className="w-9 h-9 rounded-full bg-gradient-to-br from-teal-600 to-emerald-700 flex items-center justify-center text-white text-lg shadow-sm group-hover:shadow-md transition-shadow"
+                aria-hidden
+              >
+                ✓
+              </span>
+              <span className="flex flex-col leading-tight">
+                <span className="font-bold text-base text-stone-900 tracking-tight">カルテAI</span>
+                <span className="text-[11px] text-stone-500">整体院・鍼灸院 施術メモ</span>
+              </span>
+            </Link>
+          </div>
         </header>
-        <main className="max-w-4xl mx-auto px-4 py-8">{children}</main>
+        <main className="max-w-4xl mx-auto px-5 sm:px-6 py-10">{children}</main>
       </body>
     </html>
   );

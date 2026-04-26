@@ -89,57 +89,70 @@ export default function PatientPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <Link href="/" className="text-sm text-gray-400 hover:text-gray-600">← 患者一覧</Link>
+      <div className="mb-5">
+        <Link href="/" className="inline-flex items-center gap-1 text-sm text-stone-500 hover:text-teal-700 transition">
+          <span>←</span> 患者一覧
+        </Link>
       </div>
 
       {patient && (
-        <div className="bg-white border border-gray-200 rounded-xl px-6 py-4 mb-6 flex items-start justify-between">
-          <div>
-            <h1 className="text-xl font-bold">{patient.name}</h1>
-            <p className="text-sm text-gray-400 mt-0.5">
-              {patient.kana && <span className="mr-3">{patient.kana}</span>}
-              {patient.phone && <span>{patient.phone}</span>}
-            </p>
+        <div className="bg-white border border-stone-200 rounded-2xl px-6 py-5 mb-6 flex items-start justify-between gap-4 shadow-sm">
+          <div className="flex items-center gap-4 min-w-0">
+            <div
+              className="w-14 h-14 shrink-0 rounded-full bg-gradient-to-br from-teal-50 to-emerald-50 border border-teal-100 flex items-center justify-center text-teal-700 font-semibold text-xl"
+              aria-hidden
+            >
+              {patient.name.slice(0, 1)}
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-xl font-bold text-stone-900 tracking-tight">{patient.name}</h1>
+              <p className="text-sm text-stone-500 mt-0.5 truncate">
+                {patient.kana && <span className="mr-3">{patient.kana}</span>}
+                {patient.phone && <span>{patient.phone}</span>}
+                {!patient.kana && !patient.phone && <span className="text-stone-300">未設定</span>}
+              </p>
+            </div>
           </div>
-          <div className="text-xs text-gray-400 text-right">
-            <div>来院回数: {records.length}回</div>
+          <div className="text-right shrink-0">
+            <div className="text-2xl font-bold text-teal-700 leading-none">{records.length}</div>
+            <div className="text-[11px] text-stone-500 mt-1">来院</div>
           </div>
         </div>
       )}
 
       {/* 前回サマリー */}
       {lastRecord?.summary && (
-        <div className="bg-blue-50 border border-blue-200 rounded-xl px-6 py-4 mb-6">
+        <div className="relative bg-emerald-50/60 border border-emerald-200 rounded-2xl px-6 py-5 mb-6 overflow-hidden">
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" aria-hidden />
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-blue-600 font-semibold text-sm">📋 前回サマリー</span>
-            <span className="text-xs text-blue-400">
-              {new Date(lastRecord.visitDate).toLocaleDateString("ja-JP")}
+            <span className="text-emerald-800 font-semibold text-sm">前回サマリー</span>
+            <span className="text-xs text-emerald-600">
+              {new Date(lastRecord.visitDate).toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" })}
             </span>
           </div>
-          <p className="text-sm text-blue-800 whitespace-pre-wrap">{lastRecord.summary}</p>
+          <p className="text-sm text-stone-800 whitespace-pre-wrap leading-relaxed">{lastRecord.summary}</p>
           {lastRecord.chiefComplaint && (
-            <p className="text-xs text-blue-600 mt-2">
-              主訴: {lastRecord.chiefComplaint}
+            <p className="text-xs text-emerald-700 mt-3 pt-3 border-t border-emerald-200/70">
+              <span className="font-medium">主訴:</span> {lastRecord.chiefComplaint}
             </p>
           )}
         </div>
       )}
 
       {/* 録音・入力エリア */}
-      <div className="bg-white border border-gray-200 rounded-xl px-6 py-5 mb-6">
-        <div className="flex items-center gap-2 mb-4">
-          <h2 className="font-semibold">今回の施術を記録</h2>
-          <div className="ml-auto flex gap-1 text-xs">
+      <div className="bg-white border border-stone-200 rounded-2xl px-6 py-6 mb-8 shadow-sm">
+        <div className="flex items-center gap-2 mb-5">
+          <h2 className="font-semibold text-stone-900">今回の施術を記録</h2>
+          <div className="ml-auto flex gap-1 p-1 bg-stone-100 rounded-full text-xs">
             <button
               onClick={() => setMode("voice")}
-              className={`px-3 py-1 rounded-full transition ${mode === "voice" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600"}`}
+              className={`px-3 py-1.5 rounded-full transition font-medium ${mode === "voice" ? "bg-white text-stone-900 shadow-sm" : "text-stone-500 hover:text-stone-700"}`}
             >
               🎙 音声
             </button>
             <button
               onClick={() => setMode("text")}
-              className={`px-3 py-1 rounded-full transition ${mode === "text" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600"}`}
+              className={`px-3 py-1.5 rounded-full transition font-medium ${mode === "text" ? "bg-white text-stone-900 shadow-sm" : "text-stone-500 hover:text-stone-700"}`}
             >
               ✏️ テキスト
             </button>
@@ -147,33 +160,40 @@ export default function PatientPage() {
         </div>
 
         {mode === "voice" ? (
-          <div className="flex flex-col items-center gap-4 py-4">
+          <div className="flex flex-col items-center gap-4 py-6">
             {!recording && !processing && (
-              <button
-                onClick={startRecording}
-                className="w-20 h-20 rounded-full bg-red-500 hover:bg-red-600 text-white text-3xl shadow-lg transition active:scale-95"
-              >
-                🎙
-              </button>
+              <>
+                <button
+                  onClick={startRecording}
+                  className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white text-3xl shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition active:scale-95"
+                  aria-label="録音開始"
+                >
+                  🎙
+                </button>
+                <p className="text-sm text-stone-500">タップして録音開始</p>
+              </>
             )}
             {recording && (
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-20 h-20 rounded-full bg-red-500 flex items-center justify-center animate-pulse">
+              <div className="flex flex-col items-center gap-4">
+                <div className="record-pulse w-24 h-24 rounded-full bg-red-500 flex items-center justify-center">
                   <span className="text-white text-3xl">⏺</span>
                 </div>
-                <p className="text-sm text-red-600 font-medium">録音中...</p>
+                <p className="text-sm text-red-600 font-medium flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
+                  録音中
+                </p>
                 <button
                   onClick={stopAndSubmit}
-                  className="px-6 py-2 bg-gray-800 text-white text-sm rounded-lg hover:bg-gray-700"
+                  className="px-6 py-2.5 bg-stone-900 hover:bg-stone-800 text-white text-sm rounded-full transition shadow-md"
                 >
                   録音停止・送信
                 </button>
               </div>
             )}
             {processing && (
-              <div className="flex flex-col items-center gap-2 py-4">
-                <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                <p className="text-sm text-gray-500">AIがカルテを作成中...</p>
+              <div className="flex flex-col items-center gap-3 py-4">
+                <div className="w-10 h-10 border-2 border-teal-600 border-t-transparent rounded-full animate-spin" />
+                <p className="text-sm text-stone-600">AIがカルテを作成中...</p>
               </div>
             )}
           </div>
@@ -182,15 +202,15 @@ export default function PatientPage() {
             <textarea
               value={manualText}
               onChange={(e) => setManualText(e.target.value)}
-              rows={5}
-              placeholder="施術内容を自由に入力してください。AIがカルテ形式に整形します。&#10;例：患者は腰痛と右肩こりを訴えていた。腰部に集中してほぐし、肩甲骨周りを中心にストレッチ施術。30分。次回は来週を予定。"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              rows={6}
+              placeholder="施術内容を自由に入力してください。AIがカルテ形式に整形します。&#10;&#10;例：腰痛と右肩こりの訴え。腰部に集中してほぐし、肩甲骨周りを中心にストレッチ。30分。次回は来週予定。"
+              className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/40 focus:border-teal-500 focus:bg-white resize-none transition leading-relaxed"
             />
             <div className="flex justify-end">
               <button
                 onClick={submitText}
                 disabled={processing || !manualText.trim()}
-                className="px-5 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
+                className="px-6 py-2.5 bg-teal-700 text-white text-sm rounded-full hover:bg-teal-800 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-sm"
               >
                 {processing ? "作成中..." : "カルテ作成"}
               </button>
@@ -201,59 +221,77 @@ export default function PatientPage() {
 
       {/* 過去カルテ一覧 */}
       <div>
-        <h2 className="font-semibold mb-3 text-gray-700">施術履歴 ({records.length}件)</h2>
-        <div className="space-y-3">
-          {records.map((r) => (
-            <div
-              key={r.id}
-              className="bg-white border border-gray-200 rounded-xl overflow-hidden"
-            >
-              <button
-                onClick={() => setExpandedId(expandedId === r.id ? null : r.id)}
-                className="w-full px-5 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition"
+        <div className="flex items-baseline gap-2 mb-4">
+          <h2 className="font-semibold text-stone-900">施術履歴</h2>
+          <span className="text-xs text-stone-500">{records.length}件</span>
+        </div>
+        <div className="space-y-2">
+          {records.map((r) => {
+            const isOpen = expandedId === r.id;
+            return (
+              <div
+                key={r.id}
+                className={`bg-white border rounded-2xl overflow-hidden transition ${isOpen ? "border-teal-300 shadow-sm" : "border-stone-200"}`}
               >
-                <div>
-                  <span className="font-medium text-sm">
-                    {new Date(r.visitDate).toLocaleDateString("ja-JP", {
-                      year: "numeric", month: "long", day: "numeric", weekday: "short",
-                    })}
-                  </span>
-                  {r.chiefComplaint && (
-                    <span className="text-xs text-gray-400 ml-3">{r.chiefComplaint}</span>
-                  )}
-                </div>
-                <span className="text-gray-400 text-sm">{expandedId === r.id ? "▲" : "▼"}</span>
-              </button>
-              {expandedId === r.id && (
-                <div className="px-5 pb-5 border-t border-gray-100 space-y-4">
-                  {r.chiefComplaint && (
-                    <div>
-                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">主訴</p>
-                      <p className="text-sm">{r.chiefComplaint}</p>
+                <button
+                  onClick={() => setExpandedId(isOpen ? null : r.id)}
+                  className="w-full px-5 py-4 text-left flex items-center justify-between gap-3 hover:bg-stone-50/60 transition"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="text-center shrink-0">
+                      <div className="text-base font-bold text-stone-900 leading-none">
+                        {new Date(r.visitDate).getDate()}
+                      </div>
+                      <div className="text-[10px] text-stone-500 mt-0.5">
+                        {new Date(r.visitDate).toLocaleDateString("ja-JP", { year: "numeric", month: "short" })}
+                      </div>
                     </div>
-                  )}
-                  {r.treatment && (
-                    <div>
-                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">施術内容</p>
-                      <p className="text-sm">{r.treatment}</p>
+                    <div className="w-px h-8 bg-stone-200" />
+                    <div className="min-w-0">
+                      <div className="text-xs text-stone-500">
+                        {new Date(r.visitDate).toLocaleDateString("ja-JP", { weekday: "short" })}曜日
+                      </div>
+                      {r.chiefComplaint && (
+                        <div className="text-sm text-stone-700 mt-0.5 truncate">{r.chiefComplaint}</div>
+                      )}
                     </div>
-                  )}
-                  <div>
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">カルテ</p>
-                    <p className="text-sm whitespace-pre-wrap bg-gray-50 rounded-lg p-3">{r.karteText}</p>
                   </div>
-                  {r.summary && (
+                  <span className={`text-stone-400 text-sm shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}>▾</span>
+                </button>
+                {isOpen && (
+                  <div className="px-5 pb-5 pt-1 border-t border-stone-100 space-y-4">
+                    {r.chiefComplaint && (
+                      <div>
+                        <p className="text-[11px] font-semibold text-stone-500 uppercase tracking-widest mb-1.5">主訴</p>
+                        <p className="text-sm text-stone-800">{r.chiefComplaint}</p>
+                      </div>
+                    )}
+                    {r.treatment && (
+                      <div>
+                        <p className="text-[11px] font-semibold text-stone-500 uppercase tracking-widest mb-1.5">施術内容</p>
+                        <p className="text-sm text-stone-800">{r.treatment}</p>
+                      </div>
+                    )}
                     <div>
-                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">サマリー（次回表示用）</p>
-                      <p className="text-sm text-blue-700 bg-blue-50 rounded-lg p-3 whitespace-pre-wrap">{r.summary}</p>
+                      <p className="text-[11px] font-semibold text-stone-500 uppercase tracking-widest mb-1.5">カルテ</p>
+                      <p className="text-sm whitespace-pre-wrap bg-stone-50 rounded-xl p-4 leading-relaxed text-stone-800">{r.karteText}</p>
                     </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
+                    {r.summary && (
+                      <div>
+                        <p className="text-[11px] font-semibold text-stone-500 uppercase tracking-widest mb-1.5">サマリー（次回表示用）</p>
+                        <p className="text-sm text-emerald-900 bg-emerald-50/60 border border-emerald-100 rounded-xl p-4 whitespace-pre-wrap leading-relaxed">{r.summary}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
           {records.length === 0 && (
-            <p className="text-center text-sm text-gray-400 py-8">施術記録がありません</p>
+            <div className="text-center py-12 px-6 bg-white border border-dashed border-stone-300 rounded-2xl">
+              <p className="text-sm text-stone-500">まだ施術記録がありません</p>
+              <p className="text-xs text-stone-400 mt-1">上のボタンから記録を始めましょう</p>
+            </div>
           )}
         </div>
       </div>
